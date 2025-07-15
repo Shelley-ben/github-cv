@@ -1156,7 +1156,7 @@ Generate a complete, professional README.md content:
                   <div className="flex-1 overflow-hidden">
                     {getCurrentContent() ? (
                       showPreview ? (
-                        <div className="h-full overflow-y-auto p-6 bg-white text-gray-900">
+                        <div className="h-full overflow-y-auto p-6 bg-white text-gray-900" style={{ maxHeight: 'calc(100vh - 300px)' }}>
                           <div 
                             className="prose prose-lg max-w-none"
                             dangerouslySetInnerHTML={{ 
@@ -1172,7 +1172,7 @@ Generate a complete, professional README.md content:
                           />
                         </div>
                       ) : (
-                        <div className="h-full bg-gray-900">
+                        <div className="h-full bg-gray-900 flex flex-col">
                           <div className="h-8 bg-gray-800 flex items-center px-4 border-b border-gray-700">
                             <div className="flex space-x-2">
                               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
@@ -1185,7 +1185,7 @@ Generate a complete, professional README.md content:
                             value={getCurrentContent()}
                             readOnly
                             className="w-full h-full bg-gray-900 text-gray-300 p-4 font-mono text-sm resize-none border-none outline-none"
-                            style={{ height: 'calc(100% - 2rem)' }}
+                            style={{ height: 'calc(100% - 2rem)', overflow: 'auto' }}
                           />
                         </div>
                       )
