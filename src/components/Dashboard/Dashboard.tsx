@@ -30,6 +30,7 @@ const Dashboard: React.FC = () => {
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingInsights, setLoadingInsights] = useState(false);
+  const [hasGeneratedInsights, setHasGeneratedInsights] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
@@ -57,24 +58,27 @@ const Dashboard: React.FC = () => {
       setContributionData(data);
       setLastUpdated(new Date());
       
-      // Generate AI insights after getting GitHub data
-      if (data) {
-        setLoadingInsights(true);
-        try {
-          const insights = await generateAIInsights(data);
-          setAiInsights(insights);
-        } catch (insightError) {
-          console.warn('Failed to generate AI insights:', insightError);
-        } finally {
-          setLoadingInsights(false);
-        }
-      }
-      
     } catch (error) {
       console.error('Error fetching GitHub data:', error);
       setError('Failed to load GitHub data. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGenerateInsights = async () => {
+    if (!contributionData) return;
+
+    setLoadingInsights(true);
+    try {
+      const insights = await generateAIInsights(contributionData);
+      setAiInsights(insights);
+      setHasGeneratedInsights(true);
+    } catch (error) {
+      console.error('Failed to generate AI insights:', error);
+      setError('Failed to generate AI insights. Please try again.');
+    } finally {
+      setLoadingInsights(false);
     }
   };
 
@@ -274,7 +278,12 @@ ${user.blog ? `- 🌐 Website: [${user.blog}](${user.blog})` : ''}
         </div>
     
         {/* AI Insights */}
-        <AIInsights insights={aiInsights} isLoading={loadingInsights} />
+        <AIInsights 
+          insights={aiInsights} 
+          isLoading={loadingInsights}
+          onGenerateInsights={handleGenerateInsights}
+          hasInsights={hasGeneratedInsights}
+        />
       </div>
     </div>
   );

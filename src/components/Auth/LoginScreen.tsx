@@ -65,26 +65,32 @@ const LoginScreen: React.FC = () => {
               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-gray-300 text-sm ml-4">github-cv-generator.md</span>
+              <span className="text-gray-300 text-sm ml-4">dashboard.js</span>
             </div>
             <div className="p-4 font-mono text-sm">
-              <div className="text-green-400"># Your GitHub Profile</div>
+              <div className="text-green-400">// GitHub Dashboard Analytics</div>
               <div className="text-gray-300 mt-2">
-                <span className="text-blue-400">const</span> <span className="text-yellow-400">profile</span> = {'{'}
+                <span className="text-blue-400">const</span> <span className="text-yellow-400">stats</span> = {'{'}
               </div>
               <div className="text-gray-300 ml-4">
-                <span className="text-purple-400">commits</span>: <span className="text-green-400">1,247</span>,
+                <span className="text-purple-400">totalCommits</span>: <span className="text-green-400">2,847</span>,
               </div>
               <div className="text-gray-300 ml-4">
-                <span className="text-purple-400">repositories</span>: <span className="text-green-400">42</span>,
+                <span className="text-purple-400">repositories</span>: <span className="text-green-400">67</span>,
               </div>
               <div className="text-gray-300 ml-4">
-                <span className="text-purple-400">stars</span>: <span className="text-green-400">156</span>,
+                <span className="text-purple-400">starsEarned</span>: <span className="text-green-400">324</span>,
               </div>
               <div className="text-gray-300 ml-4">
-                <span className="text-purple-400">languages</span>: [<span className="text-orange-400">'JavaScript'</span>, <span className="text-orange-400">'TypeScript'</span>]
+                <span className="text-purple-400">streak</span>: <span className="text-green-400">45</span> <span className="text-gray-500">days</span>,
+              </div>
+              <div className="text-gray-300 ml-4">
+                <span className="text-purple-400">topLanguage</span>: <span className="text-orange-400">'TypeScript'</span>
               </div>
               <div className="text-gray-300">{'}'}</div>
+              <div className="text-gray-300 mt-2">
+                <span className="text-blue-400">console</span>.<span className="text-yellow-400">log</span>(<span className="text-orange-400">'Dashboard loaded!'</span>);
+              </div>
             </div>
           </div>
 

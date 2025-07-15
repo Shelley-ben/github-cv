@@ -1,14 +1,21 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Brain, TrendingUp, Target, Award, Lightbulb } from 'lucide-react';
+import { Brain, TrendingUp, Target, Award, Lightbulb, Sparkles } from 'lucide-react';
 import { AIInsight } from '../../services/gemini';
 
 interface AIInsightsProps {
   insights: AIInsight[];
   isLoading?: boolean;
+  onGenerateInsights?: () => void;
+  hasInsights?: boolean;
 }
 
-const AIInsights: React.FC<AIInsightsProps> = ({ insights, isLoading }) => {
+const AIInsights: React.FC<AIInsightsProps> = ({ 
+  insights, 
+  isLoading, 
+  onGenerateInsights,
+  hasInsights = false 
+}) => {
   const getInsightIcon = (type: string) => {
     switch (type) {
       case 'skill':
@@ -59,6 +66,42 @@ const AIInsights: React.FC<AIInsightsProps> = ({ insights, isLoading }) => {
     );
   }
 
+  if (!hasInsights && !isLoading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="bg-gray-800 border border-gray-700 rounded-md p-6"
+      >
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-md">
+            <Brain className="w-6 h-6 text-white" />
+          </div>
+          <h3 className="text-lg font-semibold text-white font-mono">AI-Powered Insights</h3>
+        </div>
+
+        <div className="text-center py-8">
+          <div className="w-16 h-16 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-md flex items-center justify-center mx-auto mb-4 border border-purple-500/30">
+            <Sparkles className="w-8 h-8 text-purple-400" />
+          </div>
+          <h4 className="text-lg font-medium text-white mb-2 font-mono">Generate AI Insights</h4>
+          <p className="text-gray-400 mb-6 max-w-md mx-auto">
+            Get personalized recommendations and insights about your GitHub profile using advanced AI analysis.
+          </p>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onGenerateInsights}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-md flex items-center space-x-2 transition-all duration-200 font-medium mx-auto"
+          >
+            <Brain className="w-5 h-5" />
+            <span>Generate AI Insights</span>
+          </motion.button>
+        </div>
+      </motion.div>
+    );
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
