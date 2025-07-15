@@ -13,6 +13,7 @@ import AdvancedMetrics from './AdvancedMetrics';
 import ActivityTimeline from './ActivityTimeline';
 import CollaboratorNetwork from './CollaboratorNetwork';
 import AIInsights from './AIInsights';
+import ReadmeGenerator from './ReadmeGenerator';
 import { 
   GitCommit, 
   Star, 
@@ -33,6 +34,7 @@ const Dashboard: React.FC = () => {
   const [hasGeneratedInsights, setHasGeneratedInsights] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [showReadmeGenerator, setShowReadmeGenerator] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -83,90 +85,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleGenerateReadme = async () => {
-    if (!contributionData) return;
-
-    const readmeContent = generateReadmeContent(contributionData);
-    
-    // Create and download the README file
-    const blob = new Blob([readmeContent], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'README.md';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  const generateReadmeContent = (data: ContributionData): string => {
-    const { user, stats, repositories, languages } = data;
-    
-    const topLanguages = Object.entries(languages)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 5)
-      .map(([lang]) => lang);
-
-    const topRepos = repositories
-      .filter(repo => !repo.archived && !repo.disabled)
-      .sort((a, b) => (b.stargazers_count + b.forks_count) - (a.stargazers_count + a.forks_count))
-      .slice(0, 5);
-
-    return `# Hi there, I'm ${user.name || user.login} 👋
-
-${user.bio ? `*${user.bio}*\n` : ''}
-
-## 🚀 About Me
-
-- 🔭 I'm currently working on **${topRepos[0]?.name || 'exciting projects'}**
-- 🌱 I'm passionate about **${topLanguages.slice(0, 3).join(', ')}**
-- 👯 I'm looking to collaborate on **open source projects**
-- 💬 Ask me about **${topLanguages[0]} development**
-- 📫 How to reach me: **${user.email || `@${user.login}`}**
-${user.location ? `- 🌍 Based in **${user.location}**` : ''}
-
-## 📊 GitHub Stats
-
-\`\`\`
-🏆 Total Contributions: ${stats.totalCommits.toLocaleString()}
-⭐ Stars Earned: ${stats.totalStars.toLocaleString()}
-🔱 Repositories: ${stats.totalRepositories}
-🤝 Pull Requests: ${stats.totalPRs}
-🐛 Issues: ${stats.totalIssues}
-🔥 Contribution Streak: ${stats.contributionStreak} days
-\`\`\`
-
-## 🛠️ Tech Stack
-
-${topLanguages.map(lang => `![${lang}](https://img.shields.io/badge/-${lang}-05122A?style=flat&logo=${lang.toLowerCase()})`).join(' ')}
-
-## 📈 Contribution Graph
-
-![GitHub Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=${user.login}&theme=react-dark)
-
-## 🏆 Featured Projects
-
-${topRepos.map(repo => `
-### [${repo.name}](${repo.html_url})
-${repo.description || 'No description available'}
-
-- ⭐ **${repo.stargazers_count}** stars
-- 🍴 **${repo.forks_count}** forks
-- 📝 **${repo.language || 'Multiple languages'}**
-`).join('')}
-
-## 📫 Connect with me
-
-${user.blog ? `- 🌐 Website: [${user.blog}](${user.blog})` : ''}
-- 💼 LinkedIn: [linkedin.com/in/${user.login}](https://linkedin.com/in/${user.login})
-- 🐦 Twitter: [@${user.twitter_username || user.login}](https://twitter.com/${user.twitter_username || user.login})
-- 📧 Email: ${user.email || `${user.login}@example.com`}
-
----
-
-⭐️ From [${user.login}](https://github.com/${user.login})
-
-*This README was generated using [GitHub CV Generator](https://github.com/your-repo)*`;
+    setShowReadmeGenerator(true);
   };
 
   if (loading) {
@@ -285,6 +204,15 @@ ${user.blog ? `- 🌐 Website: [${user.blog}](${user.blog})` : ''}
           hasInsights={hasGeneratedInsights}
         />
       </div>
+
+      {/* README Generator Modal */}
+      {contributionData && (
+        <ReadmeGenerator
+          isOpen={showReadmeGenerator}
+          onClose={() => setShowReadmeGenerator(false)}
+          contributionData={contributionData}
+        />
+      )}
     </div>
   );
 };
